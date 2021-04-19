@@ -1,0 +1,26 @@
+{
+    "name": "kongflower/fastdfs",
+    "description": "FastDFS分布式文件上传扩展包",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "焦玉刚",
+            "email": "gang.jiao@71360.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FastDfs\\":"src/"
+        },
+        "files": [
+            "helper/Function.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require": {}
+}
