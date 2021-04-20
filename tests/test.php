@@ -4,7 +4,7 @@ require __DIR__.'/../vendor/autoload.php';
 // pp(fastdfs_tracker_query_storage_store());
 use FastDfs\FastDFS as FastDfsFastDFS;
 
-$fastDFS = new FastDfsFastDFS();
+$fastDFS = new FastDfsFastDFS("192.168.40.221",22122);
 
 // $res = $fastDFS->upload_path("/home/files/201907315550094.jpg","haoshangji",
 // 'jpeg',[

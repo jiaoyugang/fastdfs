@@ -20,9 +20,10 @@ class Lib
     public function get_tracker()
     {
         $tracker_server = fastdfs_tracker_get_connection();
-        if(!fastdfs_active_test($tracker_server)){
-            FastDFSException::error();
-        }
+        
+        // if(!fastdfs_active_test($tracker_server)){
+        //     FastDFSException::error();
+        // }
         return $tracker_server;
     }
 
@@ -79,11 +80,12 @@ class Lib
      * @param string $group_name
      * @param string $remote_filename
      */
-    public function exist_file($group_name, $remote_filename)
+    public function exist_file($group_name, $remote_filename,$tracker,$storage)
     {
-        if(!$result = fastdfs_storage_file_exist($group_name,$remote_filename, 
-            $this->get_tracker(),
-            $this->get_storage())
+        if(!$result = fastdfs_storage_file_exist($group_name,
+                $remote_filename,
+                $tracker,
+                $storage)
             ){
                 throw new \FastDfs\Dao\FastDFSException(FastDFSException::FILE_DELETION_EXCEP);
         }
@@ -95,14 +97,14 @@ class Lib
      * @param string $group_name
      * @param string $remote_filename
      */
-    public function delete_file($group_name, $remote_filename)
+    public function delete_file($group_name, $remote_filename,$tracker,$storage)
     {
         try{
-            $tracker = $this->get_tracker();
-            $storgae = $this->get_storage();
-            $exist = $this->exist_file($group_name,$remote_filename,$tracker,$storgae);
+            // $tracker = $this->get_tracker();
+            // $storgae = $this->get_storage();
+            $exist = $this->exist_file($group_name,$remote_filename,$tracker,$storage);
             if(is_array($exist) && $exist['state'] == 200){
-                if(!$result = fastdfs_storage_delete_file($group_name,$remote_filename,$tracker,$storgae)){
+                if(!$result = fastdfs_storage_delete_file($group_name,$remote_filename,$tracker,$storage)){
                     throw new \FastDfs\Dao\FastDFSException(FastDFSException::FILE_DELETION_EXCEP);
                 }
                 return ['state' => 200 ,'message' => 'successful'];
@@ -149,7 +151,7 @@ class Lib
      *      filename   => 'M00/00/02/wKgo3WB9QAiACnS0AAF6aBNq18A837.jpg'
      * ]
      */
-    public function upload_file($local_filename,$group_name,$file_ext_name='',$meta_list=[])
+    public function upload_file($local_filename,$group_name,$file_ext_name='',$meta_list=[],$tracker,$storage)
     {
         if(empty($local_filename)){
             throw new \FastDfs\Dao\FastDFSException(FastDFSException::FILE_NOT_EXIST);
@@ -169,8 +171,7 @@ class Lib
                 $file_ext_name,
                 $meta_list,
                 $group_name,
-                $this->get_tracker(),
-                $this->get_storage())
+                $tracker,$storage)
             ){
             throw new \FastDfs\Dao\FastDFSException(FastDFSException::FILE_UPLOAD_FAILED);
         }
@@ -197,7 +198,7 @@ class Lib
      * 
      * @param array  $storage_server    存储服务器assoc数组
      * [
-     *      ip_addr,port,sock,
+     *      ip_addr,port,sock,index_path
      * ]
      * 
      * ------------------------------------------------------
@@ -208,16 +209,16 @@ class Lib
      *      filename   => 'M00/00/02/wKgo3WB9QAiACnS0AAF6aBNq18A837.jpg'
      * ]
      */
-    public function upload_file_content($file_buff,$group_name,$file_ext_name='',$meta_list=[])
+    public function upload_file_content($file_buff,$group_name,$file_ext_name='',$meta_list=[],$tracker,$storage)
     {
-        $tracker = $this->get_tracker();
-        $storgae = $this->get_storage();
+        // $tracker = $this->get_tracker();
+        // $storgae = $this->get_storage();
         if(!$result = fastdfs_storage_upload_by_filebuff($file_buff,
                 $file_ext_name,
                 $meta_list,
                 $group_name,
                 $tracker,
-                $storgae)
+                $storage)
             ){
             throw new \FastDfs\Dao\FastDFSException(FastDFSException::FILE_UPLOAD_FAILED);
         }
