@@ -22,11 +22,17 @@ class FastDFS extends Lib
         $this->group_name = $group_name;
 
         // 连接fdfs
-        if(!fastdfs_active_test($this->get_tracker())){ //发送心跳
+        if($this->get_tracker()){
+            $this->tracker = $this->get_tracker();
+        }else{
             $this->tracker = $this->connect_server($ip,$port);
         }
-        $this->tracker = $this->get_tracker();
-        $this->storage = $this->get_storage();
+        // 连接fdfs
+        // if(!fastdfs_active_test($this->get_tracker())){ //发送心跳
+        //     $this->tracker = $this->connect_server($ip,$port);
+        // }
+        // $this->tracker = $this->get_tracker();
+        $this->storage = $this->get_storage($group_name,$this->tracker);
     }
 
     /**

@@ -40,7 +40,7 @@ class Lib
      */
     public function get_storage($group_name='',$tracker_server=[])
     {
-        return fastdfs_tracker_query_storage_store();
+        return fastdfs_tracker_query_storage_store($group_name,$tracker_server);
     }
     
 
